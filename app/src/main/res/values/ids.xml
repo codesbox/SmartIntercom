@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- НЕ ИЗМЕНЯЙТЕ ДАННЫЙ ФАЙЛ -->
+<!-- ПРИ ТЕСТИРОВАНИИ ФАЙЛ БУДЕТ ВОЗВРАЩЁН В ИСХОДНОЕ СОСТОЯНИЕ -->
+<resources>
+    <!-- Main Screen -->
+    <item name="button_start" type="id"/>
+    <item name="button_retry" type="id"/>
+    <item name="text_intercom_model" type="id"/>
+    <item name="button_take_photo" type="id"/>
+    <item name="image_intercom" type="id"/>
+    <item name="text_error" type="id"/>
+    <item name="button_settings" type="id"/>
+    <item name="button_history" type="id"/>
+
+    <!-- Setting Screen -->
+    <item name="input_house" type="id"/>
+    <item name="input_flat" type="id"/>
+    <item name="button_save" type="id"/>
+
+    <!-- Call Screen -->
+    <item name="button_open" type="id"/>
+    <item name="button_close" type="id"/>
+
+    <!-- Call History -->
+    <item name="recycler" type="id"/>
+    <item name="text_date" type="id"/>
+    <item name="text_status" type="id"/>
+</resources>

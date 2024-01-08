@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">SmartIntercom</string>
+
+    <!-- Call Screen -->
+    <string name="call_screen_title">Incoming call</string>
+    <string name="open_intercom">Open</string>
+    <string name="decline_intercom">Decline</string>
+
+    <!-- Main Screen -->
+    <string name="main_screen_intro_title">Welcome</string>
+    <string name="main_screen_intro_text">Setup your intercom for working app</string>
+    <string name="main_screen_intro_button">Go to setting</string>
+</resources>
