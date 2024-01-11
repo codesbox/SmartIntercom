@@ -69,11 +69,14 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("androidx.navigation:navigation-compose:2.7.4")
 
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    //Koin
+    implementation("io.insert-koin:koin-androidx-compose:3.5.3")
 
     implementation("com.google.dagger:dagger:2.48")
     ksp("com.google.dagger:dagger-compiler:2.48")
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     implementation("io.coil-kt:coil-compose:2.4.0")
 

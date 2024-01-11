@@ -24,13 +24,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 import ru.samsung.smartintercom.R
 import ru.samsung.smartintercom.core.MainScreenId
 import ru.samsung.smartintercom.ui.screen.ScreenBaseData
-import ru.samsung.smartintercom.ui.screen.main.di.MainScreenComponent
 import ru.samsung.smartintercom.ui.theme.SmartIntercomTheme
 import ru.samsung.smartintercom.ui.theme.button
-import ru.samsung.smartintercom.utils.daggerViewModel
 import ru.samsung.smartintercom.utils.setupScreenData
 
 object MainScreen : ScreenBaseData {
@@ -38,8 +38,8 @@ object MainScreen : ScreenBaseData {
 
     @Composable
     override fun Render(navController: NavController) {
-        val component = MainScreenComponent.build()
-        val viewModel = daggerViewModel { component.viewModel }
+
+        val viewModel: MainViewModel = koinViewModel()
         val state by viewModel.uiState.collectAsState()
         RenderState(
             state = state,

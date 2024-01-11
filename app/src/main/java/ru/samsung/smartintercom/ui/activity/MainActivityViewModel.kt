@@ -7,9 +7,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import ru.samsung.smartintercom.domain.call.GetCallNeededUseCase
 import ru.samsung.smartintercom.utils.MutablePublishFlow
-import javax.inject.Inject
 
-class MainActivityViewModel @Inject constructor(
+class MainActivityViewModel(
     private val getCallNeededUseCase: GetCallNeededUseCase
 ) : ViewModel() {
     val openCallScreen: SharedFlow<Unit> get() = _openCallScreen.asSharedFlow()

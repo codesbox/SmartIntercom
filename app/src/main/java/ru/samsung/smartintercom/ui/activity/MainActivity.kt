@@ -3,6 +3,7 @@ package ru.samsung.smartintercom.ui.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -10,14 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import ru.samsung.smartintercom.ui.activity.di.MainActivityComponent
+import org.koin.androidx.compose.koinViewModel
 import ru.samsung.smartintercom.ui.nav.Navigation
 import ru.samsung.smartintercom.ui.nav.Screen
 import ru.samsung.smartintercom.ui.nav.navigate
 import ru.samsung.smartintercom.ui.screen.main.MainScreen
 import ru.samsung.smartintercom.ui.theme.SmartIntercomTheme
 import ru.samsung.smartintercom.utils.collectAsEffect
-import ru.samsung.smartintercom.utils.daggerViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +31,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     Navigation(navController = navController)
-                    val component = MainActivityComponent.build()
-                    val viewModel = daggerViewModel { component.viewModel }
+                    val viewModel: MainActivityViewModel = koinViewModel()
                     viewModel.openCallScreen.collectAsEffect {
                         navController.navigate(Screen.CALL)
                     }

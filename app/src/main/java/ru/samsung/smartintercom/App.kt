@@ -1,11 +1,16 @@
 package ru.samsung.smartintercom
 
 import android.app.Application
-import ru.samsung.smartintercom.di.ContextModule
-import ru.samsung.smartintercom.di.DaggerAppComponent
+import org.koin.core.context.startKoin
+import ru.samsung.smartintercom.ui.di.appModule
+import ru.samsung.smartintercom.ui.di.dataModule
+import ru.samsung.smartintercom.ui.di.domainModule
 
 class App : Application() {
-    val appComponent = DaggerAppComponent.builder()
-        .contextModule(ContextModule(this))
-        .build()
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            modules(listOf(appModule, dataModule, domainModule))
+        }
+    }
 }

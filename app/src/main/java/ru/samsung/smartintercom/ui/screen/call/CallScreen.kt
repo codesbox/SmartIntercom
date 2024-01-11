@@ -28,16 +28,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.rememberNavController
+import org.koin.androidx.compose.koinViewModel
 import ru.samsung.smartintercom.R
 import ru.samsung.smartintercom.core.CallScreenId
 import ru.samsung.smartintercom.ui.nav.Screen
 import ru.samsung.smartintercom.ui.nav.navigate
 import ru.samsung.smartintercom.ui.screen.ScreenBaseData
-import ru.samsung.smartintercom.ui.screen.call.di.CallScreenComponent
 import ru.samsung.smartintercom.ui.theme.SmartIntercomTheme
 import ru.samsung.smartintercom.ui.theme.button
 import ru.samsung.smartintercom.utils.collectAsEffect
-import ru.samsung.smartintercom.utils.daggerViewModel
 import ru.samsung.smartintercom.utils.setupScreenData
 
 /**
@@ -53,8 +52,7 @@ object CallScreen : ScreenBaseData {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Render(navController: NavController) {
-        val component = CallScreenComponent.build()
-        val viewModel = daggerViewModel { component.viewModel }
+        val viewModel: CallViewModel = koinViewModel()
         viewModel.goBackOrOpenMainScreen.collectAsEffect {
             if (navController.graph.hierarchy.count() > 0) {
                 navController.popBackStack()

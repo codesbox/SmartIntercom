@@ -7,10 +7,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class)
-class MainViewModel @Inject constructor() : ViewModel() {
+class MainViewModel : ViewModel() {
     val uiState: StateFlow<MainState> get() = _uiState.asStateFlow()
     private val _uiState = MutableStateFlow<MainState>(MainState.Loading)
 

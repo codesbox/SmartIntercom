@@ -6,9 +6,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import ru.samsung.smartintercom.utils.MutablePublishFlow
-import javax.inject.Inject
 
-class CallViewModel @Inject constructor() : ViewModel() {
+class CallViewModel : ViewModel() {
     val goBackOrOpenMainScreen: SharedFlow<Unit> get() = _goBackOrOpenMainScreen.asSharedFlow()
     private val _goBackOrOpenMainScreen = MutablePublishFlow<Unit>()
     fun clickOpen() {
