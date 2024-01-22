@@ -4,6 +4,8 @@ import org.koin.dsl.module
 import ru.samsung.smartintercom.data.auth.repo.AuthRepositoryImpl
 import ru.samsung.smartintercom.data.call.CallDataSource
 import ru.samsung.smartintercom.data.call.CallRepositoryImpl
+import ru.samsung.smartintercom.data.intercom.IntercomInfoRepositoryImpl
+import ru.samsung.smartintercom.data.intercom.IntercomInfoStorage
 import ru.samsung.smartintercom.domain.auth.AuthRepository
 import ru.samsung.smartintercom.domain.call.CallRepository
 
@@ -16,5 +18,13 @@ val dataModule = module {
     }
     single<CallRepository> {
         CallRepositoryImpl(authRepo = get(), callDataSource = get())
+    }
+    
+    single<IntercomInfoStorage> {
+        IntercomInfoStorage()
+    }
+    
+    single<IntercomInfoRepositoryImpl>{
+        IntercomInfoRepositoryImpl(get())
     }
 }

@@ -28,6 +28,8 @@ import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
 import ru.samsung.smartintercom.R
 import ru.samsung.smartintercom.core.MainScreenId
+import ru.samsung.smartintercom.ui.nav.Screen
+import ru.samsung.smartintercom.ui.nav.navigate
 import ru.samsung.smartintercom.ui.screen.ScreenBaseData
 import ru.samsung.smartintercom.ui.theme.SmartIntercomTheme
 import ru.samsung.smartintercom.ui.theme.button
@@ -36,23 +38,12 @@ import ru.samsung.smartintercom.utils.setupScreenData
 object MainScreen : ScreenBaseData {
     override val name = MainScreenId.screenId
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Render(navController: NavController) {
 
         val viewModel: MainViewModel = koinViewModel()
         val state by viewModel.uiState.collectAsState()
-        RenderState(
-            state = state,
-            openSettingClick = {},
-        )
-    }
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    internal fun RenderState(
-        state: MainState,
-        openSettingClick: () -> Unit,
-    ) {
         Scaffold(
             modifier = Modifier.setupScreenData(this),
             content = { paddingValues ->
@@ -64,11 +55,12 @@ object MainScreen : ScreenBaseData {
                     when (state) {
                         is MainState.Intro -> {
                             IntroState(
-                                openSettingClick = openSettingClick
+                                openSettingClick = { navController.navigate(Screen.SETTING) }
                             )
                         }
-
-                        is MainState.Loading -> TODO("Добавить состояние загрузки")
+                        
+                        is MainState.Loading -> navController.navigate(Screen.LOADING)
+                        is MainState.Settings -> TODO("Переход на настройки")
                     }
                 }
             }
@@ -122,10 +114,7 @@ fun RenderPreview() {
     val mockAction = {}
     SmartIntercomTheme {
         Row {
-            MainScreen.RenderState(
-                state = MainState.Intro,
-                openSettingClick = mockAction,
-            )
+
         }
     }
 }

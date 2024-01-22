@@ -14,7 +14,7 @@ class MainViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            _uiState.emit(MainState.Intro)
+            _uiState.emit(MainState.Loading)
         }
     }
 }
