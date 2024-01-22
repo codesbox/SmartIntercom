@@ -3,7 +3,6 @@ package ru.samsung.smartintercom.ui.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -15,6 +14,7 @@ import org.koin.androidx.compose.koinViewModel
 import ru.samsung.smartintercom.ui.nav.Navigation
 import ru.samsung.smartintercom.ui.nav.Screen
 import ru.samsung.smartintercom.ui.nav.navigate
+import ru.samsung.smartintercom.ui.screen.call.CallScreen
 import ru.samsung.smartintercom.ui.screen.main.MainScreen
 import ru.samsung.smartintercom.ui.theme.SmartIntercomTheme
 import ru.samsung.smartintercom.utils.collectAsEffect
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true, device = "spec:width=1080px,height=1920px,dpi=320")
+@Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     SmartIntercomTheme {

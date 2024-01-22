@@ -8,6 +8,6 @@ import ru.samsung.smartintercom.domain.auth.model.AuthEntity
 
 class AuthRepositoryImpl : AuthRepository {
 
-    // TODO: Необходимо переопределить праивильно функцию
+    // TODO: Необходимо переопределить правильно функцию
     override val authData: Flow<AuthEntity?> get() = flow { emit(null) }
 }
