@@ -7,13 +7,11 @@ import ru.samsung.smartintercom.ui.activity.MainActivityViewModel
 import ru.samsung.smartintercom.ui.screen.call.CallViewModel
 import ru.samsung.smartintercom.ui.screen.main.MainViewModel
 import ru.samsung.smartintercom.ui.screen.setting.SettingViewModel
-import ru.samsung.smartintercom.ui.screen.loading.LoadingViewModel
 
 val appModule = module {
     viewModel{ MainActivityViewModel(getCallNeededUseCase = get()) }
     viewModel { CallViewModel() }
-    viewModel { MainViewModel() }
+    viewModel { MainViewModel(get()) }
     
     viewModelOf(::SettingViewModel)
-    viewModelOf(::LoadingViewModel)
 }
