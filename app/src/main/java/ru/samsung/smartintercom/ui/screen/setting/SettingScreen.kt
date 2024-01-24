@@ -12,6 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import ru.samsung.smartintercom.R
 import ru.samsung.smartintercom.core.MainScreenId
@@ -34,7 +35,7 @@ object SettingScreen : ScreenBaseData {
         
         val context = LocalContext.current
         LaunchedEffect(key1 = Unit, block = {
-            viewModel.loadIntercomInfo(context)
+            viewModel.loadIntercomInfo()
         })
         
         Column(modifier = Modifier.fillMaxSize()) {
@@ -45,13 +46,15 @@ object SettingScreen : ScreenBaseData {
             }, modifier = Modifier.testTag(SettingScreenId.inputHouse))
             
             TextField(
-                value = intercomInfo.flat,
+                value = intercomInfo.room,
                 onValueChange = { viewModel.changeFlat(it) },
                 modifier = Modifier.testTag(SettingScreenId.inputFlat)
             )
-            
+            val scope = rememberCoroutineScope()
             Button(modifier = Modifier.testTag(SettingScreenId.buttonSave), onClick = {
-                viewModel.loadToStorage(context = context)
+                scope.launch {
+                    viewModel.loadToStorage()
+                }
             }) {
                 Text("Save")
             }

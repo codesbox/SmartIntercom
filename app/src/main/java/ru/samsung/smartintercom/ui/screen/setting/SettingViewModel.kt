@@ -4,20 +4,22 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
-import ru.samsung.smartintercom.data.intercom.IntercomInfoDTO
-import ru.samsung.smartintercom.data.intercom.IntercomInfoRepositoryImpl
+import ru.samsung.smartintercom.domain.auth.AuthDataSource
+import ru.samsung.smartintercom.domain.auth.model.AuthEntity
 
-class SettingViewModel(val intercomInfoRepositoryImpl: IntercomInfoRepositoryImpl) : ViewModel() {
-    private val _intercomInfo = MutableStateFlow(IntercomInfoDTO("", ""))
+class SettingViewModel(private val authDataSource: AuthDataSource) : ViewModel() {
+    private val _intercomInfo = MutableStateFlow(AuthEntity("", ""))
     val intercomInfo = _intercomInfo.asStateFlow()
     
-    fun loadIntercomInfo(context: Context) {
-        _intercomInfo.value = intercomInfoRepositoryImpl.getInfo(context)
+    fun loadIntercomInfo() {
+        _intercomInfo.value = authDataSource.getAuthData()
+
     }
     
-    fun loadToStorage(context: Context) {
-        intercomInfoRepositoryImpl.saveInfo(context, intercomInfo.value)
+    suspend fun loadToStorage() {
+        authDataSource.setAuthData(intercomInfo.value)
     }
     
     fun changeHouse(house: String) {
@@ -28,7 +30,7 @@ class SettingViewModel(val intercomInfoRepositoryImpl: IntercomInfoRepositoryImp
     
     fun changeFlat(flat: String) {
         _intercomInfo.update {
-            it.copy(flat = flat)
+            it.copy(room = flat)
         }
     }
 }

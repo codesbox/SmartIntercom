@@ -9,7 +9,7 @@ import ru.samsung.smartintercom.ui.screen.main.MainViewModel
 import ru.samsung.smartintercom.ui.screen.setting.SettingViewModel
 
 val appModule = module {
-    viewModel{ MainActivityViewModel(getCallNeededUseCase = get()) }
+    viewModel{ MainActivityViewModel(getCallNeededUseCase = get(), authDataSource = get()) }
     viewModel { CallViewModel() }
     viewModel { MainViewModel(get()) }
     

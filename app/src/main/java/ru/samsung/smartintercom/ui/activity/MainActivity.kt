@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import org.koin.androidx.compose.koinViewModel
+import ru.samsung.smartintercom.data.auth.dataSource.AuthDataSourceImpl
+import ru.samsung.smartintercom.domain.auth.AuthDataSource
 import ru.samsung.smartintercom.ui.nav.Navigation
 import ru.samsung.smartintercom.ui.nav.Screen
 import ru.samsung.smartintercom.ui.nav.navigate
@@ -35,6 +37,7 @@ class MainActivity : ComponentActivity() {
                     viewModel.openCallScreen.collectAsEffect {
                         navController.navigate(Screen.CALL)
                     }
+                    viewModel.sendDataToSharedFlow()
                 }
             }
         }
