@@ -1,39 +1,42 @@
 package ru.samsung.smartintercom.ui.screen.main
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import ru.samsung.smartintercom.domain.auth.AuthRepository
-import ru.samsung.smartintercom.domain.auth.model.AuthEntity
+import kotlinx.coroutines.flow.update
+import ru.samsung.smartintercom.ui.screen.main.MainState.Intercom
 
-class MainViewModel(private val authRepository: AuthRepository) : ViewModel() {
-    
-    private val _authEntity = MutableStateFlow<AuthEntity?>(null)
-    
-    val uiState: StateFlow<MainState> get() = _uiState.asStateFlow()
+class MainViewModel : ViewModel() {
     private val _uiState = MutableStateFlow<MainState>(MainState.Intro)
+    val uiState: StateFlow<MainState> = _uiState.asStateFlow()
     
-    init {
-        viewModelScope.launch {
-            _uiState.emit(MainState.Loading)
+    fun firstLaunch() {
+        _uiState.update {
+            MainState.Loading
+        }
+        
+        // TODO: Сделать обработку, первый ли сейчас запуск, если да - IntroState, если нет - LoadingState
+    }
+    
+    fun takePhoto() {
+        _uiState.update {
+            val state = it as Intercom
+            Intercom(model = state.model, firstEntry = false, image = null)
         }
     }
     
     fun loadIntercom() {
-        viewModelScope.launch {
-            authRepository.authData.collectLatest {
-                _authEntity.emit(it)
-            }
-        }
+        _uiState.update { MainState.Loading }
+        
+        _uiState.update {
+            Intercom(
+                model = "TEST INTERCOM", firstEntry = true, image = null
+            )
+        } //            TODO: Запрос на сервер по info, должен выдать информацию о модели домофона, вместо TEST INTERCOM вставить полученные данные. Если есть какая-то ошибка, обновить стейт на Error
     }
     
     fun retry() {
-        viewModelScope.launch {
-            _uiState.emit(MainState.Loading)
-        }
+        _uiState.update { MainState.Loading }
     }
 }

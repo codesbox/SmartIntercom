@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -14,15 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign.Companion
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import org.koin.androidx.compose.koinViewModel
 import ru.samsung.smartintercom.R
 import ru.samsung.smartintercom.core.MainScreenId
@@ -30,7 +32,7 @@ import ru.samsung.smartintercom.ui.nav.Screen.HISTORY
 import ru.samsung.smartintercom.ui.nav.Screen.SETTING
 import ru.samsung.smartintercom.ui.nav.navigate
 import ru.samsung.smartintercom.ui.screen.ScreenBaseData
-import ru.samsung.smartintercom.ui.theme.SmartIntercomTheme
+import ru.samsung.smartintercom.ui.screen.main.MainState.*
 import ru.samsung.smartintercom.ui.theme.button
 import ru.samsung.smartintercom.utils.setupScreenData
 
@@ -51,100 +53,210 @@ object MainScreen : ScreenBaseData {
                     .padding(paddingValues)
             ) {
                 when (state) {
-                    is MainState.Intro    -> IntroState(startClick = {
-                        navController.navigate(SETTING)
+                    is Intro    -> IntroState(
+                        onLaunch = {
+                            viewModel.firstLaunch()
+                        },
+                        startClick = {
+                            viewModel.retry()
+                            navController.navigate(SETTING)
+                        },
+                    )
+                    
+                    is Loading  -> LoadingState(onLaunch = {
+                        viewModel.loadIntercom()
                     })
                     
-                    is MainState.Loading  -> LoadingState()
-                    is MainState.Error    -> ErrorState(retryClick = {
-                        viewModel.retry()
-                    })
-                    is MainState.Intercom -> IntercomState()
+                    is Error    -> ErrorState(retryClick = viewModel::retry)
+                    is Intercom -> IntercomState(
+                        mainState = state as Intercom,
+                        takePhotoClick = viewModel::takePhoto,
+                        retryClick = viewModel::retry,
+                    )
                 }
             }
             
-            Buttons(openSettingClick = {
-                navController.navigate(SETTING)
-            }, openHistoryClick = {
-                navController.navigate(HISTORY)
-            })
+            Buttons(
+                openSettingClick = { navController.navigate(SETTING) },
+                openHistoryClick = { navController.navigate(HISTORY) },
+            )
         })
     }
     
     @Composable
     private fun IntroState(
+        onLaunch: () -> Unit,
         startClick: () -> Unit,
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        LaunchedEffect(key1 = Unit, block = {
+            onLaunch()
+        })
+        
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(4.dp)
+                .background(MaterialTheme.colorScheme.surface),
+        ) {
             Column(
                 modifier = Modifier.align(Alignment.Center),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 Text(
+                    modifier = Modifier.padding(vertical = 8.dp),
                     text = stringResource(R.string.main_screen_intro_title),
                     style = MaterialTheme.typography.displayLarge,
+                    fontWeight = FontWeight.ExtraBold,
                     textAlign = TextAlign.Center,
                 )
-                Spacer(modifier = Modifier.width(8.dp))
                 Text(
+                    modifier = Modifier.padding(vertical = 8.dp),
                     text = stringResource(R.string.main_screen_intro_text),
-                    style = MaterialTheme.typography.headlineLarge,
+                    style = MaterialTheme.typography.headlineSmall,
                     textAlign = TextAlign.Center,
+                    maxLines = 5,
                 )
-            }
-            Button(
-                modifier = Modifier
-                    .testTag(MainScreenId.buttonStart)
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 64.dp), onClick = startClick
-            ) {
-                Text(
-                    text = "Start", style = MaterialTheme.typography.button.normal
-                )
+                Button(
+                    modifier = Modifier
+                        .testTag(MainScreenId.buttonStart)
+                        .fillMaxWidth(0.75f)
+                        .padding(vertical = 16.dp),
+                    onClick = startClick,
+                ) {
+                    Text(
+                        text = "Start",
+                        style = MaterialTheme.typography.button.large,
+                        textAlign = TextAlign.Center,
+                    )
+                }
             }
         }
     }
     
     @Composable
-    private fun LoadingState() {
+    private fun LoadingState(onLaunch: () -> Unit) {
+        
+        LaunchedEffect(key1 = Unit, block = {
+            onLaunch()
+        })
+        
         Box(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier.align(Alignment.Center),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                
-                RoundedLinearProgressIndicator(
-                    modifier = Modifier
-                        .width(256.dp)
-                        .padding(4.dp),
-                    color = MaterialTheme.colorScheme.primary,
-                    backgroundColor = MaterialTheme.colorScheme.primaryContainer
-                )
-                
-                Text(
-                    "Please, wait", modifier = Modifier
-                        .padding(all = 4.dp)
-                        .padding(top = 8.dp)
-                )
-            }
+            RoundedLinearProgressIndicator(
+                modifier = Modifier
+                    .width(256.dp)
+                    .padding(4.dp)
+                    .align(Alignment.Center),
+            )
         }
     }
     
     @Composable
     private fun ErrorState(retryClick: () -> Unit) {
-        Column {
-            Text("Whoops...", fontSize = 32.sp, fontWeight = FontWeight.ExtraBold)
-            Button(modifier = Modifier.testTag(MainScreenId.buttonRetry), onClick = retryClick) {
-                Text("Retry")
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceAround,
+            ) {
+                Text(
+                    text = "Error: incorrect data",
+                    style = MaterialTheme.typography.displaySmall,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+                Button(
+                    modifier = Modifier
+                        .testTag(MainScreenId.buttonRetry)
+                        .padding(vertical = 8.dp),
+                    onClick = retryClick
+                ) {
+                    Text(
+                        text = "Retry",
+                        style = MaterialTheme.typography.button.large,
+                        textAlign = TextAlign.Center,
+                    )
+                }
             }
         }
     }
     
     @Composable
-    private fun IntercomState() {
-        
+    private fun IntercomState(
+        mainState: Intercom,
+        takePhotoClick: () -> Unit,
+        retryClick: () -> Unit,
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = mainState.model,
+                    modifier = Modifier
+                        .testTag(MainScreenId.textIntercomModel)
+                        .padding(vertical = 8.dp),
+                    style = MaterialTheme.typography.displayMedium
+                )
+                
+                if (!mainState.firstEntry) {
+                    Box(
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .fillMaxWidth()
+                            .height(196.dp)
+                    ) {
+                        when (mainState.image) {
+                            null -> CircularProgressIndicator(
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                            
+                            else -> AsyncImage(
+                                modifier = Modifier
+                                    .testTag(MainScreenId.imageIntercom)
+                                    .padding(vertical = 8.dp),
+                                model = mainState.image,
+                                contentDescription = "Image from intercom",
+                                contentScale = ContentScale.FillHeight,
+                            )
+                        }
+                    }
+                }
+                
+                Button(
+                    modifier = Modifier
+                        .testTag(MainScreenId.buttonTakePhoto)
+                        .fillMaxWidth(0.75f)
+                        .padding(vertical = 8.dp),
+                    onClick = takePhotoClick,
+                ) {
+                    Text(
+                        text = "Take photo",
+                        style = MaterialTheme.typography.button.normal,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+                
+                Button(
+                    modifier = Modifier
+                        .testTag(MainScreenId.buttonRetry)
+                        .fillMaxWidth(0.75f)
+                        .padding(vertical = 8.dp),
+                    onClick = retryClick,
+                ) {
+                    Text(
+                        text = "Retry",
+                        style = MaterialTheme.typography.button.normal,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+        }
     }
     
     @Composable
@@ -154,7 +266,8 @@ object MainScreen : ScreenBaseData {
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .fillMaxWidth()
-                    .wrapContentHeight(),
+                    .wrapContentHeight()
+                    .padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
@@ -162,14 +275,17 @@ object MainScreen : ScreenBaseData {
                     modifier = Modifier.testTag(MainScreenId.buttonSettings),
                     onClick = openSettingClick,
                 ) {
-                    Text(stringResource(id = R.string.main_screen_intro_button))
+                    Text(
+                        text = stringResource(id = R.string.main_screen_intro_button),
+                        textAlign = TextAlign.Center,
+                    )
                 }
                 
                 Button(
                     modifier = Modifier.testTag(MainScreenId.buttonHistory),
                     onClick = openHistoryClick,
                 ) {
-                    Text("Go to history")
+                    Text(text = "Go to history", textAlign = Companion.Center)
                 }
             }
         }
@@ -182,9 +298,7 @@ object MainScreen : ScreenBaseData {
         modifier: Modifier = Modifier,
         height: Dp = 8.dp,
         color: Color = MaterialTheme.colorScheme.primary,
-        backgroundColor: Color = color.copy(
-            alpha = ProgressIndicatorDefaults.linearColor.alpha
-        ),
+        backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     ) {
         val infiniteTransition = rememberInfiniteTransition(label = "")
         val animatedColor by infiniteTransition.animateColor(
@@ -225,21 +339,6 @@ object MainScreen : ScreenBaseData {
                             .background(animatedColor, CircleShape))
                 }
             }
-        }
-    }
-    
-    @Composable
-    fun ButtonsPreview() {
-        Buttons({}, {})
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun RenderPreview() {
-    SmartIntercomTheme {
-        Row {
-            MainScreen.ButtonsPreview()
         }
     }
 }
