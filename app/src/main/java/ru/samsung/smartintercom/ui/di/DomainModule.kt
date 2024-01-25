@@ -3,6 +3,8 @@ package ru.samsung.smartintercom.ui.di
 import com.google.gson.Gson
 import org.koin.dsl.module
 import ru.samsung.smartintercom.domain.call.GetCallNeededUseCase
+import ru.samsung.smartintercom.domain.intercom.GetImageUseCase
+import ru.samsung.smartintercom.domain.intercom.GetModelUseCase
 
 val domainModule = module {
     single<Gson>{
@@ -10,5 +12,11 @@ val domainModule = module {
     }
     factory<GetCallNeededUseCase> {
         GetCallNeededUseCase(callRepository = get())
+    }
+    factory<GetModelUseCase> {
+        GetModelUseCase(get())
+    }
+    factory<GetImageUseCase> {
+        GetImageUseCase(get())
     }
 }

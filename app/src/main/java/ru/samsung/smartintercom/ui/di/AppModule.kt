@@ -12,6 +12,6 @@ val appModule = module {
     viewModel{ MainActivityViewModel(getCallNeededUseCase = get(), authDataSource = get()) }
     viewModel { CallViewModel() }
     viewModel { MainViewModel(get(), get()) }
-    
+
     viewModelOf(::SettingViewModel)
 }
