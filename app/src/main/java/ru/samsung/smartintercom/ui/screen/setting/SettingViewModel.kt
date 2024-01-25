@@ -15,7 +15,6 @@ class SettingViewModel(private val authDataSource: AuthDataSource) : ViewModel()
     
     fun loadIntercomInfo() {
         _intercomInfo.value = authDataSource.getAuthData()
-
     }
     
     suspend fun loadToStorage() {
@@ -29,6 +28,7 @@ class SettingViewModel(private val authDataSource: AuthDataSource) : ViewModel()
     }
     
     fun changeFlat(flat: String) {
+        println("qqq $flat")
         _intercomInfo.update {
             it.copy(room = flat)
         }

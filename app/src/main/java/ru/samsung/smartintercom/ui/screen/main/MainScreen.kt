@@ -55,7 +55,7 @@ object MainScreen : ScreenBaseData {
                 when (state) {
                     is Intro    -> IntroState(
                         onLaunch = {
-                            viewModel.firstLaunch()
+                            viewModel.loadIntercom()
                         },
                         startClick = {
                             viewModel.retry()

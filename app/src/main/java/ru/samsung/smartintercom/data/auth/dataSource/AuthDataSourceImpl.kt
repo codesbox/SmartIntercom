@@ -17,7 +17,7 @@ class AuthDataSourceImpl(private val context: Context): AuthDataSource {
     override suspend fun setAuthData(authEntity: AuthEntity) {
         val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
         pref.edit().putString("house", authEntity.house)
-            .putString("flat", authEntity.room).apply()
+            .putString("room", authEntity.room).apply()
         mutableSharedFlow.emit(authEntity)
     }
 

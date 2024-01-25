@@ -17,6 +17,7 @@ import ru.samsung.smartintercom.core.SettingScreenId
 import ru.samsung.smartintercom.ui.nav.Screen.MAIN
 import ru.samsung.smartintercom.ui.nav.navigate
 import ru.samsung.smartintercom.ui.screen.ScreenBaseData
+import ru.samsung.smartintercom.ui.screen.main.MainViewModel
 
 object SettingScreen : ScreenBaseData {
     override val name = SettingScreenId.screenId
@@ -73,7 +74,8 @@ object SettingScreen : ScreenBaseData {
                         scope.launch {
                             viewModel.loadToStorage()
                         }
-                        navController.navigate(MAIN)
+                        
+                        navController.popBackStack()
                     },
                 ) {
                     Text("Save")

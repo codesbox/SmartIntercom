@@ -5,19 +5,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import ru.samsung.smartintercom.ui.screen.main.MainState.Intercom
+import ru.samsung.smartintercom.domain.auth.AuthDataSource
+import ru.samsung.smartintercom.domain.auth.AuthRepository
+import ru.samsung.smartintercom.ui.screen.main.MainState.*
 
-class MainViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow<MainState>(MainState.Intro)
+class MainViewModel(private val dataSource: AuthDataSource, private val authRepository: AuthRepository) : ViewModel() {
+    private val _uiState = MutableStateFlow<MainState>(Loading)
     val uiState: StateFlow<MainState> = _uiState.asStateFlow()
-    
-    fun firstLaunch() {
-        _uiState.update {
-            MainState.Loading
-        }
-        
-        // TODO: Сделать обработку, первый ли сейчас запуск, если да - IntroState, если нет - LoadingState
-    }
     
     fun takePhoto() {
         _uiState.update {
@@ -27,16 +21,17 @@ class MainViewModel : ViewModel() {
     }
     
     fun loadIntercom() {
-        _uiState.update { MainState.Loading }
-        
-        _uiState.update {
-            Intercom(
-                model = "TEST INTERCOM", firstEntry = true, image = null
-            )
-        } //            TODO: Запрос на сервер по info, должен выдать информацию о модели домофона, вместо TEST INTERCOM вставить полученные данные. Если есть какая-то ошибка, обновить стейт на Error
+        val entity = dataSource.getAuthData()
+        if((entity.house == "") or (entity.room == "")){
+            _uiState.update { Intro }
+        }
+        else{
+            // TODO: полуение модели
+            _uiState.update { Intercom(firstEntry = true) }
+        }
     }
     
     fun retry() {
-        _uiState.update { MainState.Loading }
+        _uiState.update { Loading }
     }
 }
