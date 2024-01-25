@@ -5,11 +5,15 @@ import ru.samsung.smartintercom.data.auth.dataSource.AuthDataSourceImpl
 import ru.samsung.smartintercom.data.auth.repo.AuthRepositoryImpl
 import ru.samsung.smartintercom.data.call.CallDataSource
 import ru.samsung.smartintercom.data.call.CallRepositoryImpl
+import ru.samsung.smartintercom.data.callHistory.CallHistoryDataSourceImpl
+import ru.samsung.smartintercom.data.callHistory.CallHistoryRepositoryImpl
 import ru.samsung.smartintercom.data.intercom.IntercomDataSourceImpl
 import ru.samsung.smartintercom.data.intercom.IntercomRepositoryImpl
 import ru.samsung.smartintercom.domain.auth.AuthDataSource
 import ru.samsung.smartintercom.domain.auth.AuthRepository
 import ru.samsung.smartintercom.domain.call.CallRepository
+import ru.samsung.smartintercom.domain.callHistory.CallHistoryDataSource
+import ru.samsung.smartintercom.domain.callHistory.CallHistoryRepository
 import ru.samsung.smartintercom.domain.intercom.IntercomDataSource
 import ru.samsung.smartintercom.domain.intercom.IntercomRepository
 
@@ -31,5 +35,11 @@ val dataModule = module {
     }
     single<IntercomRepository> {
         IntercomRepositoryImpl(get())
+    }
+    single<CallHistoryRepository> {
+        CallHistoryRepositoryImpl(get())
+    }
+    single<CallHistoryDataSource> {
+        CallHistoryDataSourceImpl(get())
     }
 }

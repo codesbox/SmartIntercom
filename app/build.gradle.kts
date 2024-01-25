@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    kotlin("kapt")
 }
 
 /**
@@ -81,4 +82,10 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
 
     implementation("io.ktor:ktor-network:2.3.5")
+
+    //ROOM
+    implementation("androidx.room:room-runtime:2.4.1")
+    kapt("androidx.room:room-compiler:2.4.1")
+    implementation("androidx.room:room-ktx:2.4.1")
+
 }
