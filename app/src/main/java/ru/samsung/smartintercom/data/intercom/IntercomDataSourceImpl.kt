@@ -6,15 +6,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.samsung.smartintercom.data.utils.RetrofitBuilder
 import ru.samsung.smartintercom.domain.auth.AuthDataSource
+import ru.samsung.smartintercom.domain.auth.GetAuthDataUseCase
 import ru.samsung.smartintercom.domain.intercom.IntercomDataSource
 import ru.samsung.smartintercom.domain.intercom.IntercomModel
 
-class IntercomDataSourceImpl(private val authDataSource: AuthDataSource): IntercomDataSource {
+class IntercomDataSourceImpl(private val getAuthDataUseCase: GetAuthDataUseCase): IntercomDataSource {
     override fun getModel(): Flow<IntercomModel?> {
         return flow {
             try {
                 val apiService = RetrofitBuilder.retrofit.create(APIService::class.java)
-                val response = apiService.getModel(authDataSource.getAuthData().house, authDataSource.getAuthData().room)
+                val response = apiService.getModel(getAuthDataUseCase.execute().house, getAuthDataUseCase.execute().room)
                 emit(response)
             }
             catch(e: Exception){
@@ -27,7 +28,7 @@ class IntercomDataSourceImpl(private val authDataSource: AuthDataSource): Interc
         return flow {
             try{
                 val apiService = RetrofitBuilder.retrofit.create(APIService::class.java)
-                val response = apiService.getImage(authDataSource.getAuthData().house, authDataSource.getAuthData().room)
+                val response = apiService.getImage(getAuthDataUseCase.execute().house, getAuthDataUseCase.execute().room)
                 val responseBody = response.body()
                 if (responseBody != null) {
                     val bitmap = BitmapFactory.decodeStream(responseBody.byteStream())

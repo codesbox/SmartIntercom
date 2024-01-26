@@ -7,18 +7,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import ru.samsung.smartintercom.domain.auth.AuthDataSource
+import ru.samsung.smartintercom.domain.auth.GetAuthDataUseCase
+import ru.samsung.smartintercom.domain.auth.SetAuthDataUseCase
 import ru.samsung.smartintercom.domain.auth.model.AuthEntity
 
-class SettingViewModel(private val authDataSource: AuthDataSource) : ViewModel() {
+class SettingViewModel(private val setAuthDataUseCase: SetAuthDataUseCase, private val getAuthDataUseCase: GetAuthDataUseCase) : ViewModel() {
     private val _intercomInfo = MutableStateFlow(AuthEntity("", ""))
     val intercomInfo = _intercomInfo.asStateFlow()
     
     fun loadIntercomInfo() {
-        _intercomInfo.value = authDataSource.getAuthData()
+        _intercomInfo.value = getAuthDataUseCase.execute()
     }
     
     suspend fun loadToStorage() {
-        authDataSource.setAuthData(intercomInfo.value)
+        setAuthDataUseCase.execute(intercomInfo.value)
     }
     
     fun changeHouse(house: String) {
