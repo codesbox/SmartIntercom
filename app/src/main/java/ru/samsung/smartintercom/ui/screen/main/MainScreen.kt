@@ -2,6 +2,7 @@ package ru.samsung.smartintercom.ui.screen.main
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -24,7 +26,6 @@ import androidx.compose.ui.text.style.TextAlign.Companion
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import org.koin.androidx.compose.koinViewModel
 import ru.samsung.smartintercom.R
 import ru.samsung.smartintercom.core.MainScreenId
@@ -45,6 +46,10 @@ object MainScreen : ScreenBaseData {
         
         val viewModel: MainViewModel = koinViewModel()
         val state by viewModel.uiState.collectAsState()
+        
+        LaunchedEffect(key1 = Unit, block = {
+            viewModel.loadFirst()
+        })
         
         Scaffold(modifier = Modifier.setupScreenData(this), content = { paddingValues ->
             Box(
@@ -197,7 +202,7 @@ object MainScreen : ScreenBaseData {
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = mainState.model,
+                    text = mainState.model.model,
                     modifier = Modifier
                         .testTag(MainScreenId.textIntercomModel)
                         .padding(vertical = 8.dp),
@@ -216,13 +221,15 @@ object MainScreen : ScreenBaseData {
                                 modifier = Modifier.align(Alignment.Center)
                             )
                             
-                            else -> AsyncImage(
+                            else -> Image(
                                 modifier = Modifier
                                     .testTag(MainScreenId.imageIntercom)
-                                    .padding(vertical = 8.dp),
-                                model = mainState.image,
+                                    .padding(vertical = 8.dp)
+                                    .height(196.dp)
+                                    .align(Alignment.Center),
+                                painter = BitmapPainter(mainState.image),
                                 contentDescription = "Image from intercom",
-                                contentScale = ContentScale.FillHeight,
+                                contentScale = ContentScale.Crop,
                             )
                         }
                     }
@@ -328,15 +335,14 @@ object MainScreen : ScreenBaseData {
                     .background(backgroundColor, CircleShape)
             ) {
                 BoxWithConstraints {
-                    Box(
-                        Modifier
-                            .graphicsLayer {
-                                translationX = (maxWidth * animTranslationX).toPx()
-                            }
-                            .fillMaxHeight()
-                            .clip(CircleShape)
-                            .width(maxWidth * .25f)
-                            .background(animatedColor, CircleShape))
+                    Box(Modifier
+                        .graphicsLayer {
+                            translationX = (maxWidth * animTranslationX).toPx()
+                        }
+                        .fillMaxHeight()
+                        .clip(CircleShape)
+                        .width(maxWidth * .25f)
+                        .background(animatedColor, CircleShape))
                 }
             }
         }

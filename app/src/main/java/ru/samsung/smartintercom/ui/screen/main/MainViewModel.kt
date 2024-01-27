@@ -1,34 +1,78 @@
 package ru.samsung.smartintercom.ui.screen.main
 
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import ru.samsung.smartintercom.domain.auth.AuthDataSource
-import ru.samsung.smartintercom.domain.auth.AuthRepository
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import ru.samsung.smartintercom.domain.auth.GetAuthDataUseCase
+import ru.samsung.smartintercom.domain.intercom.GetImageUseCase
+import ru.samsung.smartintercom.domain.intercom.GetModelUseCase
 import ru.samsung.smartintercom.ui.screen.main.MainState.*
 
-class MainViewModel(private val getAuthDataUseCase: GetAuthDataUseCase) : ViewModel() {
+class MainViewModel(
+    private val getAuthDataUseCase: GetAuthDataUseCase,
+    private val getImageUseCase: GetImageUseCase,
+    private val getModelUseCase: GetModelUseCase,
+) : ViewModel() {
     private val _uiState = MutableStateFlow<MainState>(Loading)
     val uiState: StateFlow<MainState> = _uiState.asStateFlow()
     
+    init {
+        loadIntercom()
+    }
+    
+    fun loadFirst() {
+        viewModelScope.launch {
+            val entity = getAuthDataUseCase.execute()
+            if ((entity.house == "") or (entity.room == "")) {
+                _uiState.emit(Intro)
+            } else {
+                getModelUseCase.execute().collectLatest {
+                    if (it == null) {
+                        _uiState.emit(Error)
+                    } else {
+                        _uiState.emit(Intercom(model = it, firstEntry = true, image = null))
+                    }
+                }
+            }
+        }
+    }
+    
     fun takePhoto() {
-        _uiState.update {
-            val state = it as Intercom
-            Intercom(model = state.model, firstEntry = false, image = null)
+        viewModelScope.launch {
+            getImageUseCase.execute().collectLatest { bitmap ->
+                if (bitmap == null) {
+                    _uiState.update { Error }
+                    return@collectLatest
+                }
+                _uiState.update {
+                    val state = it as Intercom
+                    Intercom(
+                        model = state.model, firstEntry = false, image = bitmap.asImageBitmap()
+                    )
+                }
+            }
         }
     }
     
     fun loadIntercom() {
-        val entity = getAuthDataUseCase.execute()
-        if((entity.house == "") or (entity.room == "")){
-            _uiState.update { Intro }
-        }
-        else{
-            // TODO: полуение модели
-            _uiState.update { Intercom(firstEntry = true) }
+        viewModelScope.launch {
+            val entity = getAuthDataUseCase.execute()
+            if ((entity.house == "") or (entity.room == "")) {
+                _uiState.emit(Intro)
+            } else {
+                getModelUseCase.execute().collectLatest { model ->
+                    when (model) {
+                        null -> _uiState.emit(Error)
+                        else -> _uiState.emit(
+                            Intercom(
+                                model = model, firstEntry = true, image = null
+                            )
+                        )
+                    }
+                }
+            }
         }
     }
     

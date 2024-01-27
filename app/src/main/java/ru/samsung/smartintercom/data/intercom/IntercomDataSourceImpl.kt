@@ -2,10 +2,11 @@ package ru.samsung.smartintercom.data.intercom
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import ru.samsung.smartintercom.data.utils.RetrofitBuilder
-import ru.samsung.smartintercom.domain.auth.AuthDataSource
 import ru.samsung.smartintercom.domain.auth.GetAuthDataUseCase
 import ru.samsung.smartintercom.domain.intercom.IntercomDataSource
 import ru.samsung.smartintercom.domain.intercom.IntercomModel
@@ -40,6 +41,6 @@ class IntercomDataSourceImpl(private val getAuthDataUseCase: GetAuthDataUseCase)
             catch (e: Exception){
                 emit(null)
             }
-        }
+        }.flowOn(Dispatchers.IO)
     }
 }

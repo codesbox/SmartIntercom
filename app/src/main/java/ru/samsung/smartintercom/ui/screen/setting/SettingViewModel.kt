@@ -1,12 +1,9 @@
 package ru.samsung.smartintercom.ui.screen.setting
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
-import ru.samsung.smartintercom.domain.auth.AuthDataSource
 import ru.samsung.smartintercom.domain.auth.GetAuthDataUseCase
 import ru.samsung.smartintercom.domain.auth.SetAuthDataUseCase
 import ru.samsung.smartintercom.domain.auth.model.AuthEntity
@@ -30,7 +27,6 @@ class SettingViewModel(private val setAuthDataUseCase: SetAuthDataUseCase, priva
     }
     
     fun changeFlat(flat: String) {
-        println("qqq $flat")
         _intercomInfo.update {
             it.copy(room = flat)
         }
