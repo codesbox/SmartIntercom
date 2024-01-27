@@ -8,12 +8,14 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import ru.samsung.smartintercom.domain.auth.AuthDataSource
 import ru.samsung.smartintercom.domain.auth.SendDataToSharedFlowUseCase
+import ru.samsung.smartintercom.domain.auth.SendNullToSharedFlowUseCase
 import ru.samsung.smartintercom.domain.call.GetCallNeededUseCase
 import ru.samsung.smartintercom.utils.MutablePublishFlow
 
 class MainActivityViewModel(
     private val getCallNeededUseCase: GetCallNeededUseCase,
-    private val sendDataToSharedFlowUseCase: SendDataToSharedFlowUseCase
+    private val sendDataToSharedFlowUseCase: SendDataToSharedFlowUseCase,
+    private val sendNullToSharedFlowUseCase: SendNullToSharedFlowUseCase
 ) : ViewModel() {
     val openCallScreen: SharedFlow<Unit> get() = _openCallScreen.asSharedFlow()
     private val _openCallScreen = MutablePublishFlow<Unit>()
@@ -22,6 +24,11 @@ class MainActivityViewModel(
             sendDataToSharedFlowUseCase.execute()
         }
 
+    }
+    fun sendNullToSharedFlow(){
+        viewModelScope.launch {
+            sendNullToSharedFlowUseCase.execute()
+        }
     }
 
     init {

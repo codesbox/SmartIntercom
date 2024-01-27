@@ -39,5 +39,9 @@ class AuthDataSourceImpl(private val context: Context): AuthDataSource {
         return AuthEntity(house, room)
     }
 
+    override suspend fun sendNullToSharedFlow() {
+        mutableSharedFlow.emit(null)
+    }
+
 
 }

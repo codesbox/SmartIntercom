@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
                     Navigation(navController = navController)
                     val viewModel: MainActivityViewModel = koinViewModel()
                     viewModel.openCallScreen.collectAsEffect {
+                        viewModel.sendNullToSharedFlow()
                         navController.navigate(Screen.CALL)
                     }
                     viewModel.sendDataToSharedFlow()

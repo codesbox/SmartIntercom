@@ -8,5 +8,6 @@ interface AuthDataSource {
     suspend fun setAuthData(authEntity: AuthEntity)
     suspend fun sendDataToSharedFlow()
     fun getAuthData(): AuthEntity
+    suspend fun sendNullToSharedFlow()
 
 }

@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import org.koin.dsl.module
 import ru.samsung.smartintercom.domain.auth.GetAuthDataUseCase
 import ru.samsung.smartintercom.domain.auth.SendDataToSharedFlowUseCase
+import ru.samsung.smartintercom.domain.auth.SendNullToSharedFlowUseCase
 import ru.samsung.smartintercom.domain.auth.SetAuthDataUseCase
 import ru.samsung.smartintercom.domain.call.GetCallNeededUseCase
 import ru.samsung.smartintercom.domain.callHistory.GetCallHistoryUseCase
@@ -38,5 +39,8 @@ val domainModule = module {
     }
     factory<SetAuthDataUseCase> {
         SetAuthDataUseCase(get())
+    }
+    factory<SendNullToSharedFlowUseCase> {
+        SendNullToSharedFlowUseCase(get())
     }
 }
