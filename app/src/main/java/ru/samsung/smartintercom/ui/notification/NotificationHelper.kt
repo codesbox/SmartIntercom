@@ -31,24 +31,6 @@ class NotificationHelper {
         notificationManger?.notify(NOTIFICATION_ID, notification)
     }
     
-    fun notification(context: Context) :Notification {
-        val intent = Intent(context, MainActivity::class.java)
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(
-            context, System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_IMMUTABLE
-        )
-        return NotificationCompat.Builder(context, CHANNEL_ID).setSmallIcon(R.drawable.smartintercomlogo)
-            .setContentTitle(context.resources.getString(R.string.app_name))
-            .setContentText(context.resources.getString(R.string.notification_text))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT).setContentIntent(pendingIntent)
-            .build()
-    }
-    
-    
-    fun cancelNotification(context: Context) {
-        val notificationManager = context.getSystemService<NotificationManager>()
-        notificationManager?.cancelAll()
-    }
-    
     companion object {
         const val CHANNEL_ID = "notification_channel"
         

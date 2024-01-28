@@ -5,10 +5,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import ru.samsung.smartintercom.domain.auth.GetAuthDataUseCase
+import ru.samsung.smartintercom.domain.auth.SendNullToSharedFlowUseCase
 import ru.samsung.smartintercom.domain.auth.SetAuthDataUseCase
 import ru.samsung.smartintercom.domain.auth.model.AuthEntity
 
-class SettingViewModel(private val setAuthDataUseCase: SetAuthDataUseCase, private val getAuthDataUseCase: GetAuthDataUseCase) : ViewModel() {
+class SettingViewModel(
+    private val setAuthDataUseCase: SetAuthDataUseCase,
+    private val getAuthDataUseCase: GetAuthDataUseCase,
+    private val sendNullToSharedFlowUseCase: SendNullToSharedFlowUseCase,
+) : ViewModel() {
     private val _intercomInfo = MutableStateFlow(AuthEntity("", ""))
     val intercomInfo = _intercomInfo.asStateFlow()
     
@@ -17,6 +22,7 @@ class SettingViewModel(private val setAuthDataUseCase: SetAuthDataUseCase, priva
     }
     
     suspend fun loadToStorage() {
+        sendNullToSharedFlowUseCase.execute()
         setAuthDataUseCase.execute(intercomInfo.value)
     }
     

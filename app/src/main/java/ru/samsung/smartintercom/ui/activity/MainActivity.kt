@@ -11,7 +11,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.navigation.compose.rememberNavController
-import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
 import ru.samsung.smartintercom.ui.nav.Navigation
 import ru.samsung.smartintercom.ui.nav.Screen
@@ -41,7 +40,6 @@ class MainActivity : ComponentActivity() {
                     Navigation(navController = navController)
                     val viewModel: MainActivityViewModel = koinViewModel()
                     viewModel.openCallScreen.collectAsEffect {
-                        viewModel.sendNullToSharedFlow()
                         navController.navigate(Screen.CALL)
                     }
                     viewModel.sendDataToSharedFlow()
