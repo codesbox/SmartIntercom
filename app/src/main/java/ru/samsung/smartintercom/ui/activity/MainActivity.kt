@@ -10,7 +10,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
 import ru.samsung.smartintercom.ui.nav.Navigation
 import ru.samsung.smartintercom.ui.nav.Screen
@@ -20,6 +25,9 @@ import ru.samsung.smartintercom.ui.theme.SmartIntercomTheme
 import ru.samsung.smartintercom.utils.collectAsEffect
 
 class MainActivity : ComponentActivity() {
+    
+    private val notificationHelper by inject<NotificationHelper>()
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -40,11 +48,22 @@ class MainActivity : ComponentActivity() {
                     Navigation(navController = navController)
                     val viewModel: MainActivityViewModel = koinViewModel()
                     viewModel.openCallScreen.collectAsEffect {
-                        navController.navigate(Screen.CALL)
+                        notificationHelper.createNotification(this)
+                        lifecycleScope.launch {
+                            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                                navController.navigate(Screen.CALL)
+                                notificationHelper.cancelNotifications(this@MainActivity)
+                            }
+                        }
                     }
                     viewModel.sendDataToSharedFlow()
                 }
             }
         }
+    }
+    
+    override fun onStop() {
+        super.onStop()
+        notificationHelper.created = false
     }
 }
