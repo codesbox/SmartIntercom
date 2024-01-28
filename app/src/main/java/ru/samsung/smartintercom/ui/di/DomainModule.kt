@@ -9,6 +9,7 @@ import ru.samsung.smartintercom.domain.auth.SetAuthDataUseCase
 import ru.samsung.smartintercom.domain.call.GetCallNeededUseCase
 import ru.samsung.smartintercom.domain.callHistory.GetCallHistoryUseCase
 import ru.samsung.smartintercom.domain.callHistory.SaveCallInfoUseCase
+import ru.samsung.smartintercom.domain.callRespond.CallRespondUseCase
 import ru.samsung.smartintercom.domain.intercom.GetImageUseCase
 import ru.samsung.smartintercom.domain.intercom.GetModelUseCase
 
@@ -42,5 +43,8 @@ val domainModule = module {
     }
     factory<SendNullToSharedFlowUseCase> {
         SendNullToSharedFlowUseCase(get())
+    }
+    factory<CallRespondUseCase> {
+        CallRespondUseCase(get())
     }
 }
