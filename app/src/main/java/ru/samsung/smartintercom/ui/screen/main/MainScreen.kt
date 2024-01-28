@@ -167,9 +167,11 @@ object MainScreen : ScreenBaseData {
                 verticalArrangement = Arrangement.SpaceAround,
             ) {
                 Text(
-                    text = "Error: incorrect data",
+                    text = stringResource(string.error),
                     style = MaterialTheme.typography.displaySmall,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .testTag(MainScreenId.textError)
                 )
                 Button(
                     modifier = Modifier

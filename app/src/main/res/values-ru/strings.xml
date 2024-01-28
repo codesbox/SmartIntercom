@@ -19,4 +19,5 @@
     <string name="closed">Закрыт</string>
     <string name="start">Начать</string>
     <string name="notification_text">Входящий вызов</string>
+    <string name="error">Ошибка подключения</string>
 </resources>
