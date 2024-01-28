@@ -18,4 +18,5 @@
     <string name="opened">Открыт</string>
     <string name="closed">Закрыт</string>
     <string name="start">Начать</string>
+    <string name="notification_text">Входящий вызов</string>
 </resources>

@@ -11,10 +11,12 @@ import ru.samsung.smartintercom.domain.callHistory.models.CallInfo
 import ru.samsung.smartintercom.domain.callHistory.models.CallTime
 import ru.samsung.smartintercom.domain.callHistory.models.DoorState.CLOSE
 import ru.samsung.smartintercom.domain.callHistory.models.DoorState.OPEN
+import ru.samsung.smartintercom.domain.callRespond.CallRespondUseCase
 import ru.samsung.smartintercom.utils.MutablePublishFlow
 
 class CallViewModel(
     private val saveCallInfoUseCase: SaveCallInfoUseCase,
+    private val callRespondUseCase: CallRespondUseCase
 ) : ViewModel() {
     val goBackOrOpenMainScreen: SharedFlow<Unit> get() = _goBackOrOpenMainScreen.asSharedFlow()
     private val _goBackOrOpenMainScreen = MutablePublishFlow<Unit>()
@@ -23,7 +25,7 @@ class CallViewModel(
         viewModelScope.launch {
             val calendar = Calendar.getInstance()
             saveCallInfoUseCase.execute(CallInfo(getTime(calendar), OPEN))
-            
+            callRespondUseCase.execute(OPEN)
             _goBackOrOpenMainScreen.emit(Unit)
         }
     }
@@ -32,7 +34,7 @@ class CallViewModel(
         viewModelScope.launch {
             val calendar = Calendar.getInstance()
             saveCallInfoUseCase.execute(CallInfo(getTime(calendar), CLOSE))
-            
+            callRespondUseCase.execute(CLOSE)
             _goBackOrOpenMainScreen.emit(Unit)
         }
     }

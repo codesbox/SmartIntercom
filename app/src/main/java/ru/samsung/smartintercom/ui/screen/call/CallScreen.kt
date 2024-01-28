@@ -19,7 +19,6 @@ import ru.samsung.smartintercom.core.CallScreenId
 import ru.samsung.smartintercom.ui.nav.Screen
 import ru.samsung.smartintercom.ui.nav.navigate
 import ru.samsung.smartintercom.ui.screen.ScreenBaseData
-import ru.samsung.smartintercom.ui.theme.button
 import ru.samsung.smartintercom.utils.collectAsEffect
 import ru.samsung.smartintercom.utils.setupScreenData
 
@@ -100,7 +99,7 @@ object CallScreen : ScreenBaseData {
             onClick = onClick,
         ) {
             Text(
-                style = MaterialTheme.typography.button.large,
+                style = MaterialTheme.typography.headlineSmall,
                 text = text,
             )
         }

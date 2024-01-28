@@ -21,7 +21,7 @@ import ru.samsung.smartintercom.utils.setupScreenData
 object SettingScreen : ScreenBaseData {
     override val name = SettingScreenId.screenId
     
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Render(navController: NavController) {
         val viewModel = koinViewModel<SettingViewModel>()
@@ -118,7 +118,7 @@ object SettingScreen : ScreenBaseData {
     }
     
     private fun isValidHouse(house: String): Boolean {
-        val houseRegex = """(?=^.{1,4}${'$'})(\d+/?\d)""".toRegex()
+        val houseRegex = """(?=^.{1,4}${'$'})(\d+/?\d?)""".toRegex()
         return houseRegex.matches(house)
     }
     
