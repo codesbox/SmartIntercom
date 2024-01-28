@@ -67,7 +67,7 @@ object SettingScreen : ScreenBaseData {
                             viewModel.changeHouse(it)
                             isHouseError = !isValidHouse(it)
                         },
-                        placeholder = {
+                        placeholder = @Composable {
                             Text(text = stringResource(string.enter_house_number))
                         },
                         maxLines = 1,
@@ -83,7 +83,7 @@ object SettingScreen : ScreenBaseData {
                             viewModel.changeFlat(it)
                             isRoomError = !isValidRoom(it)
                         },
-                        placeholder = {
+                        placeholder = @Composable {
                             Text(text = stringResource(string.enter_room_number))
                         },
                         maxLines = 1,
