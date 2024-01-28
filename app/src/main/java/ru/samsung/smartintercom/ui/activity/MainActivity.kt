@@ -6,18 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import org.koin.androidx.compose.koinViewModel
-import ru.samsung.smartintercom.data.auth.dataSource.AuthDataSourceImpl
-import ru.samsung.smartintercom.domain.auth.AuthDataSource
 import ru.samsung.smartintercom.ui.nav.Navigation
 import ru.samsung.smartintercom.ui.nav.Screen
 import ru.samsung.smartintercom.ui.nav.navigate
-import ru.samsung.smartintercom.ui.screen.call.CallScreen
-import ru.samsung.smartintercom.ui.screen.main.MainScreen
 import ru.samsung.smartintercom.ui.theme.SmartIntercomTheme
 import ru.samsung.smartintercom.utils.collectAsEffect
 
@@ -42,13 +36,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SmartIntercomTheme {
-        MainScreen.Render(rememberNavController())
     }
 }

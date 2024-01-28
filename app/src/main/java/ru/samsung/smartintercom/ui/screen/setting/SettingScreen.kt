@@ -6,18 +6,22 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import ru.samsung.smartintercom.R.string
 import ru.samsung.smartintercom.core.SettingScreenId
 import ru.samsung.smartintercom.ui.screen.ScreenBaseData
+import ru.samsung.smartintercom.ui.theme.button
 import ru.samsung.smartintercom.utils.setupScreenData
 
 object SettingScreen : ScreenBaseData {
     override val name = SettingScreenId.screenId
     
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
     @Composable
     override fun Render(navController: NavController) {
         val viewModel = koinViewModel<SettingViewModel>()
@@ -27,17 +31,32 @@ object SettingScreen : ScreenBaseData {
         })
         
         Scaffold(modifier = Modifier.setupScreenData(this)) { paddingValues ->
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues = paddingValues)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues = paddingValues)
+            ) {
+                
+                
                 Column(
                     modifier = Modifier.align(Alignment.Center),
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    
+                    
                     val intercomInfo by viewModel.intercomInfo.collectAsState()
                     var isHouseError by remember { mutableStateOf(false) }
                     var isRoomError by remember { mutableStateOf(false) }
+                    
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(vertical = 64.dp),
+                        text = stringResource(string.intercom_settings),
+                        style = MaterialTheme.typography.displayMedium,
+                        textAlign = TextAlign.Center,
+                    )
                     
                     OutlinedTextField(
                         modifier = Modifier
@@ -49,7 +68,7 @@ object SettingScreen : ScreenBaseData {
                             isHouseError = !isValidHouse(it)
                         },
                         placeholder = {
-                            Text(text = "Enter house address")
+                            Text(text = stringResource(string.enter_house_number))
                         },
                         maxLines = 1,
                         isError = isHouseError,
@@ -65,7 +84,7 @@ object SettingScreen : ScreenBaseData {
                             isRoomError = !isValidRoom(it)
                         },
                         placeholder = {
-                            Text(text = "Enter room number")
+                            Text(text = stringResource(string.enter_room_number))
                         },
                         maxLines = 1,
                         isError = isRoomError,
@@ -87,7 +106,10 @@ object SettingScreen : ScreenBaseData {
                         },
                         enabled = !isHouseError and !isRoomError,
                     ) {
-                        Text("Save")
+                        Text(
+                            stringResource(string.save_button),
+                            style = MaterialTheme.typography.button.normal
+                        )
                     }
                 }
             }
@@ -96,7 +118,7 @@ object SettingScreen : ScreenBaseData {
     }
     
     private fun isValidHouse(house: String): Boolean {
-        val houseRegex = """(?=^.{1,4}${'$'})(\d+(/?[a-e])?)""".toRegex()
+        val houseRegex = """(?=^.{1,4}${'$'})(\d+/?\d)""".toRegex()
         return houseRegex.matches(house)
     }
     

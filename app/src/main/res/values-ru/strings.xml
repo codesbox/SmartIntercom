@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="call_screen_title">Входяший звонок</string>
+    <string name="open_intercom">Открыть</string>
+    <string name="decline_intercom">Отклонить</string>
+    <string name="main_screen_intro_title">Добро пожаловать!</string>
+    <string name="main_screen_intro_text">Настройте свой домофон для корректной работы приложения</string>
+    <string name="main_screen_intro_button">Перейти в настройки</string>
+    <string name="image_description">Изображение с домофона</string>
+    <string name="take_photo">Сделать фото</string>
+    <string name="retry">Повторить</string>
+    <string name="go_to_history">Перейти в историю</string>
+    <string name="intercom_settings">Настройки домофона</string>
+    <string name="enter_house_number">Введите номер дома</string>
+    <string name="enter_room_number">Введите номер квартиры</string>
+    <string name="save_button">Сохранить</string>
+    <string name="no_calls_yet">У вас пока не было звонков</string>
+    <string name="opened">Открыт</string>
+    <string name="closed">Закрыт</string>
+    <string name="start">Начать</string>
+</resources>

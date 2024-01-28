@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SmartIntercom</string>
+    <string name="app_name" translatable="false">SmartIntercom</string>
 
     <!-- Call Screen -->
     <string name="call_screen_title">Incoming call</string>
@@ -10,4 +10,16 @@
     <string name="main_screen_intro_title">Welcome</string>
     <string name="main_screen_intro_text">Setup your intercom for working app</string>
     <string name="main_screen_intro_button">Go to setting</string>
+    <string name="image_description">Image from intercom</string>
+    <string name="take_photo">Take photo</string>
+    <string name="retry">Retry</string>
+    <string name="go_to_history">Go to history</string>
+    <string name="intercom_settings">Intercom Settings</string>
+    <string name="enter_house_number">Enter house number</string>
+    <string name="enter_room_number">Enter room number</string>
+    <string name="save_button">Save</string>
+    <string name="no_calls_yet">You have no calls yet</string>
+    <string name="opened">Opened</string>
+    <string name="closed">Closed</string>
+    <string name="start">Start</string>
 </resources>

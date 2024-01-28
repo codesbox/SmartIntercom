@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.koin.androidx.compose.koinViewModel
-import ru.samsung.smartintercom.R
+import ru.samsung.smartintercom.R.string
 import ru.samsung.smartintercom.core.MainScreenId
 import ru.samsung.smartintercom.ui.nav.Screen.HISTORY
 import ru.samsung.smartintercom.ui.nav.Screen.SETTING
@@ -110,14 +110,14 @@ object MainScreen : ScreenBaseData {
             ) {
                 Text(
                     modifier = Modifier.padding(vertical = 8.dp),
-                    text = stringResource(R.string.main_screen_intro_title),
+                    text = stringResource(string.main_screen_intro_title),
                     style = MaterialTheme.typography.displayLarge,
                     fontWeight = FontWeight.ExtraBold,
                     textAlign = TextAlign.Center,
                 )
                 Text(
                     modifier = Modifier.padding(vertical = 8.dp),
-                    text = stringResource(R.string.main_screen_intro_text),
+                    text = stringResource(string.main_screen_intro_text),
                     style = MaterialTheme.typography.headlineSmall,
                     textAlign = TextAlign.Center,
                     maxLines = 5,
@@ -130,7 +130,7 @@ object MainScreen : ScreenBaseData {
                     onClick = startClick,
                 ) {
                     Text(
-                        text = "Start",
+                        text = stringResource(string.start),
                         style = MaterialTheme.typography.button.large,
                         textAlign = TextAlign.Center,
                     )
@@ -205,8 +205,10 @@ object MainScreen : ScreenBaseData {
                     text = mainState.model.model,
                     modifier = Modifier
                         .testTag(MainScreenId.textIntercomModel)
-                        .padding(vertical = 8.dp),
-                    style = MaterialTheme.typography.displayMedium
+                        .padding(vertical = 8.dp, horizontal = 8.dp)
+                        .align(Alignment.CenterHorizontally),
+                    style = MaterialTheme.typography.headlineLarge,
+                    textAlign = Companion.Center
                 )
                 
                 if (!mainState.firstEntry) {
@@ -228,7 +230,7 @@ object MainScreen : ScreenBaseData {
                                     .height(196.dp)
                                     .align(Alignment.Center),
                                 painter = BitmapPainter(mainState.image),
-                                contentDescription = "Image from intercom",
+                                contentDescription = stringResource(string.image_description),
                                 contentScale = ContentScale.Crop,
                             )
                         }
@@ -243,7 +245,7 @@ object MainScreen : ScreenBaseData {
                     onClick = takePhotoClick,
                 ) {
                     Text(
-                        text = "Take photo",
+                        text = stringResource(string.take_photo),
                         style = MaterialTheme.typography.button.normal,
                         textAlign = TextAlign.Center,
                     )
@@ -257,7 +259,7 @@ object MainScreen : ScreenBaseData {
                     onClick = retryClick,
                 ) {
                     Text(
-                        text = "Retry",
+                        text = stringResource(string.retry),
                         style = MaterialTheme.typography.button.normal,
                         textAlign = TextAlign.Center,
                     )
@@ -283,7 +285,7 @@ object MainScreen : ScreenBaseData {
                     onClick = openSettingClick,
                 ) {
                     Text(
-                        text = stringResource(id = R.string.main_screen_intro_button),
+                        text = stringResource(id = string.main_screen_intro_button),
                         textAlign = TextAlign.Center,
                     )
                 }
@@ -292,7 +294,7 @@ object MainScreen : ScreenBaseData {
                     modifier = Modifier.testTag(MainScreenId.buttonHistory),
                     onClick = openHistoryClick,
                 ) {
-                    Text(text = "Go to history", textAlign = Companion.Center)
+                    Text(text = stringResource(string.go_to_history), textAlign = Companion.Center)
                 }
             }
         }
