@@ -118,7 +118,7 @@ object SettingScreen : ScreenBaseData {
     }
     
     private fun isValidHouse(house: String): Boolean {
-        val houseRegex = """(?=^.{1,4}${'$'})(\d+/?\d?)""".toRegex()
+        val houseRegex = """(?=^.{1,4}${'$'})(\d+(/?[a-e])?)""".toRegex()
         return houseRegex.matches(house)
     }
     

@@ -55,7 +55,7 @@ object CallHistoryScreen : ScreenBaseData {
                         .fillMaxSize()
                         .padding(paddingValues)
                 ) {
-                    items(listOf(CallInfo(CallTime("10", "10", "10", "10", "2000"), OPEN))) {
+                    items(calls) {
                         CallInfoCard(callInfo = it)
                     }
                 }
