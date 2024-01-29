@@ -7,5 +7,5 @@ sealed interface MainState {
     data object Intro : MainState
     data object Loading : MainState
     data object Error: MainState
-    data class Intercom(val model: IntercomModel = IntercomModel(""), val firstEntry: Boolean = true, val image: ImageBitmap? = null) : MainState
+    data class Intercom(val model: IntercomModel = IntercomModel(""), val firstEntry: Boolean = true, val image: ImageBitmap? = null, val error: String? = null) : MainState
 }

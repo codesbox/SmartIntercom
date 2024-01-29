@@ -221,9 +221,22 @@ object MainScreen : ScreenBaseData {
                             .height(196.dp)
                     ) {
                         when (mainState.image) {
-                            null -> CircularProgressIndicator(
-                                modifier = Modifier.align(Alignment.Center)
-                            )
+                            null -> {
+                                when (mainState.error) {
+                                    null -> CircularProgressIndicator(
+                                        modifier = Modifier.align(Alignment.Center)
+                                    )
+                                    
+                                    else -> {
+                                        Text(
+                                            text = stringResource(string.error_receiving_image),
+                                            modifier = Modifier.testTag(MainScreenId.textError).align(Alignment.Center),
+                                            textAlign = Companion.Center,
+                                            style = MaterialTheme.typography.headlineMedium
+                                        )
+                                    }
+                                }
+                            }
                             
                             else -> Image(
                                 modifier = Modifier
@@ -339,14 +352,15 @@ object MainScreen : ScreenBaseData {
                     .background(backgroundColor, CircleShape)
             ) {
                 BoxWithConstraints {
-                    Box(Modifier
-                        .graphicsLayer {
-                            translationX = (maxWidth * animTranslationX).toPx()
-                        }
-                        .fillMaxHeight()
-                        .clip(CircleShape)
-                        .width(maxWidth * .25f)
-                        .background(animatedColor, CircleShape))
+                    Box(
+                        Modifier
+                            .graphicsLayer {
+                                translationX = (maxWidth * animTranslationX).toPx()
+                            }
+                            .fillMaxHeight()
+                            .clip(CircleShape)
+                            .width(maxWidth * .25f)
+                            .background(animatedColor, CircleShape))
                 }
             }
         }
