@@ -112,8 +112,6 @@ object SettingScreen : ScreenBaseData {
                             scope.launch {
                                 viewModel.loadToStorage()
                             }
-                            
-                            navController.popBackStack()
                         },
                         enabled = isVisible,
                     ) {
