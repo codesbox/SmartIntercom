@@ -1,10 +1,12 @@
 package ru.samsung.smartintercom.ui.screen.call
 
 import android.icu.util.Calendar
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import ru.samsung.smartintercom.domain.callHistory.SaveCallInfoUseCase
 import ru.samsung.smartintercom.domain.callHistory.models.CallInfo
@@ -25,7 +27,9 @@ class CallViewModel(
         viewModelScope.launch {
             val calendar = Calendar.getInstance()
             saveCallInfoUseCase.execute(CallInfo(getTime(calendar), OPEN))
-            callRespondUseCase.execute(OPEN)
+            callRespondUseCase.execute(OPEN).collectLatest {
+                Log.d("CallViewModel", it.toString())
+            }
             _goBackOrOpenMainScreen.emit(Unit)
         }
     }
@@ -34,7 +38,9 @@ class CallViewModel(
         viewModelScope.launch {
             val calendar = Calendar.getInstance()
             saveCallInfoUseCase.execute(CallInfo(getTime(calendar), CLOSE))
-            callRespondUseCase.execute(CLOSE)
+            callRespondUseCase.execute(CLOSE).collectLatest {
+                Log.d("CallViewModel", it.toString())
+            }
             _goBackOrOpenMainScreen.emit(Unit)
         }
     }
