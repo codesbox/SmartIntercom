@@ -32,13 +32,27 @@ object SettingScreen : ScreenBaseData {
             viewModel.loadIntercomInfo()
         })
         
+        
+        val intercomInfo by viewModel.intercomInfo.collectAsState()
+        val previousState by viewModel.previousInfo.collectAsState()
+        var isHouseError by remember { mutableStateOf(isValidHouse(intercomInfo.house)) }
+        var isRoomError by remember { mutableStateOf(isValidRoom(intercomInfo.room)) }
+        var isVisible by remember { mutableStateOf(false) }
+        
+        LaunchedEffect(key1 = previousState, key2 = intercomInfo, block = {
+            isVisible =
+                !isHouseError && !isRoomError && (viewModel.previousInfo.value.house != viewModel.intercomInfo.value.house || viewModel.previousInfo.value.room != viewModel.intercomInfo.value.room)
+        })
+        
         Scaffold(modifier = Modifier.setupScreenData(this)) { paddingValues ->
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues = paddingValues)
             ) {
-                IconButton(modifier = Modifier.align(Alignment.TopStart).padding(8.dp) ,onClick = { navController.popBackStack() }) {
+                IconButton(modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(8.dp) ,onClick = { navController.popBackStack() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.back),
                         contentDescription = stringResource(string.go_back)
@@ -50,10 +64,6 @@ object SettingScreen : ScreenBaseData {
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    val intercomInfo by viewModel.intercomInfo.collectAsState()
-                    var isHouseError by remember { mutableStateOf(isValidHouse(intercomInfo.house)) }
-                    var isRoomError by remember { mutableStateOf(isValidRoom(intercomInfo.room)) }
-                    var isVisible by remember { mutableStateOf(false) }
                     
                     
                     Text(
@@ -74,7 +84,7 @@ object SettingScreen : ScreenBaseData {
                             viewModel.changeHouse(it)
                             isHouseError = !isValidHouse(it)
                             isVisible =
-                                !isHouseError && !isRoomError && (viewModel.previousInfo.house != viewModel.intercomInfo.value.house || viewModel.previousInfo.room != viewModel.intercomInfo.value.room)
+                                !isHouseError && !isRoomError && (viewModel.previousInfo.value.house != viewModel.intercomInfo.value.house || viewModel.previousInfo.value.room != viewModel.intercomInfo.value.room)
                         },
                         placeholder = {
                             Text(text = stringResource(string.enter_house_number))
@@ -92,7 +102,7 @@ object SettingScreen : ScreenBaseData {
                             viewModel.changeFlat(it)
                             isRoomError = !isValidRoom(it)
                             isVisible =
-                                !isRoomError && !isHouseError && (viewModel.previousInfo.house != viewModel.intercomInfo.value.house || viewModel.previousInfo.room != viewModel.intercomInfo.value.room)
+                                !isRoomError && !isHouseError && (viewModel.previousInfo.value.house != viewModel.intercomInfo.value.house || viewModel.previousInfo.value.room != viewModel.intercomInfo.value.room)
                         },
                         placeholder = {
                             Text(text = stringResource(string.enter_room_number))
@@ -112,6 +122,10 @@ object SettingScreen : ScreenBaseData {
                             scope.launch {
                                 viewModel.loadToStorage()
                             }
+                            
+                            isVisible =
+                                !isHouseError && !isRoomError && (viewModel.previousInfo.value.house != viewModel.intercomInfo.value.house || viewModel.previousInfo.value.room != viewModel.intercomInfo.value.room)
+                            
                         },
                         enabled = isVisible,
                     ) {

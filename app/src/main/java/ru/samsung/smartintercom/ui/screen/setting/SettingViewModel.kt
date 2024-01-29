@@ -17,9 +17,7 @@ class SettingViewModel(
     private val _intercomInfo = MutableStateFlow(AuthEntity("", ""))
     val intercomInfo = _intercomInfo.asStateFlow()
     
-    val previousInfo: AuthEntity by lazy {
-        getAuthDataUseCase.execute()
-    }
+    val previousInfo = MutableStateFlow(getAuthDataUseCase.execute())
     
     fun loadIntercomInfo() {
         _intercomInfo.value = getAuthDataUseCase.execute()
@@ -28,6 +26,7 @@ class SettingViewModel(
     suspend fun loadToStorage() {
         sendNullToSharedFlowUseCase.execute()
         setAuthDataUseCase.execute(intercomInfo.value)
+        previousInfo.emit(intercomInfo.value)
     }
     
     fun changeHouse(house: String) {
