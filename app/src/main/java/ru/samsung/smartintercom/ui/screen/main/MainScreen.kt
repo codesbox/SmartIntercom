@@ -214,6 +214,7 @@ object MainScreen : ScreenBaseData {
                 if (!mainState.firstEntry) {
                     
                     if (mainState.error != null) {
+                        Box(modifier = Modifier.testTag(MainScreenId.imageIntercom).width(0.dp).height(0.dp))
                         Text(
                             text = stringResource(string.error_receiving_image),
                             modifier = Modifier.testTag(MainScreenId.textError),
@@ -223,6 +224,7 @@ object MainScreen : ScreenBaseData {
                     } else {
                         Box(
                             modifier = Modifier
+                                .testTag(MainScreenId.imageIntercom)
                                 .padding(vertical = 8.dp)
                                 .fillMaxWidth()
                                 .height(196.dp)
@@ -238,7 +240,6 @@ object MainScreen : ScreenBaseData {
                                 else -> {
                                     Image(
                                         modifier = Modifier
-                                            .testTag(MainScreenId.imageIntercom)
                                             .padding(vertical = 8.dp)
                                             .height(196.dp)
                                             .align(Alignment.Center),
@@ -251,7 +252,11 @@ object MainScreen : ScreenBaseData {
                             }
                         }
                     }
+                }else{
+                    Box(modifier = Modifier.testTag(MainScreenId.imageIntercom).width(0.dp).height(0.dp))
                 }
+                
+                
                 
                 
                 Button(
