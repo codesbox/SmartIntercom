@@ -169,9 +169,7 @@ object MainScreen : ScreenBaseData {
                 Text(
                     text = stringResource(string.error),
                     style = MaterialTheme.typography.displaySmall,
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .testTag(MainScreenId.textError)
+                    modifier = Modifier.padding(vertical = 8.dp)
                 )
                 Button(
                     modifier = Modifier
@@ -222,34 +220,34 @@ object MainScreen : ScreenBaseData {
                             textAlign = Companion.Center,
                             style = MaterialTheme.typography.headlineMedium
                         )
-                    }
-                    
-                    Box(
-                        modifier = Modifier
-                            .padding(vertical = 8.dp)
-                            .fillMaxWidth()
-                            .height(196.dp)
-                    ) {
-                        
-                        when (mainState.image) {
-                            null -> {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.align(Alignment.Center)
-                                )
-                            }
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .padding(vertical = 8.dp)
+                                .fillMaxWidth()
+                                .height(196.dp)
+                        ) {
                             
-                            else -> {
-                                Image(
-                                    modifier = Modifier
-                                        .testTag(MainScreenId.imageIntercom)
-                                        .padding(vertical = 8.dp)
-                                        .height(196.dp)
-                                        .align(Alignment.Center),
-                                    painter = BitmapPainter(mainState.image),
-                                    contentDescription = stringResource(string.image_description),
-                                    contentScale = ContentScale.Crop,
-                                )
+                            when (mainState.image) {
+                                null -> {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.align(Alignment.Center)
+                                    )
+                                }
                                 
+                                else -> {
+                                    Image(
+                                        modifier = Modifier
+                                            .testTag(MainScreenId.imageIntercom)
+                                            .padding(vertical = 8.dp)
+                                            .height(196.dp)
+                                            .align(Alignment.Center),
+                                        painter = BitmapPainter(mainState.image),
+                                        contentDescription = stringResource(string.image_description),
+                                        contentScale = ContentScale.Crop,
+                                    )
+                                    
+                                }
                             }
                         }
                     }
