@@ -41,7 +41,14 @@ class MainViewModel(
     
     fun takePhoto() {
         viewModelScope.launch {
-            getImageUseCase.execute().collectLatest { bitmap ->
+            getImageUseCase.execute().catch {
+                _uiState.update {
+                    val state = it as Intercom
+                    Intercom(
+                        model = state.model, firstEntry = false, image = state.image, error = "Image not found"
+                    )
+                }
+            }.collectLatest { bitmap ->
                 if (bitmap == null) {
                     _uiState.update {
                         val state = it as Intercom

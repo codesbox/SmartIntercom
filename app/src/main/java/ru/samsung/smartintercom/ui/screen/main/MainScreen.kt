@@ -214,43 +214,47 @@ object MainScreen : ScreenBaseData {
                 )
                 
                 if (!mainState.firstEntry) {
+                    
+                    if (mainState.error != null) {
+                        Text(
+                            text = stringResource(string.error_receiving_image),
+                            modifier = Modifier.testTag(MainScreenId.textError),
+                            textAlign = Companion.Center,
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+                    }
+                    
                     Box(
                         modifier = Modifier
                             .padding(vertical = 8.dp)
                             .fillMaxWidth()
                             .height(196.dp)
                     ) {
+                        
                         when (mainState.image) {
                             null -> {
-                                when (mainState.error) {
-                                    null -> CircularProgressIndicator(
-                                        modifier = Modifier.align(Alignment.Center)
-                                    )
-                                    
-                                    else -> {
-                                        Text(
-                                            text = stringResource(string.error_receiving_image),
-                                            modifier = Modifier.testTag(MainScreenId.textError).align(Alignment.Center),
-                                            textAlign = Companion.Center,
-                                            style = MaterialTheme.typography.headlineMedium
-                                        )
-                                    }
-                                }
+                                CircularProgressIndicator(
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
                             }
                             
-                            else -> Image(
-                                modifier = Modifier
-                                    .testTag(MainScreenId.imageIntercom)
-                                    .padding(vertical = 8.dp)
-                                    .height(196.dp)
-                                    .align(Alignment.Center),
-                                painter = BitmapPainter(mainState.image),
-                                contentDescription = stringResource(string.image_description),
-                                contentScale = ContentScale.Crop,
-                            )
+                            else -> {
+                                Image(
+                                    modifier = Modifier
+                                        .testTag(MainScreenId.imageIntercom)
+                                        .padding(vertical = 8.dp)
+                                        .height(196.dp)
+                                        .align(Alignment.Center),
+                                    painter = BitmapPainter(mainState.image),
+                                    contentDescription = stringResource(string.image_description),
+                                    contentScale = ContentScale.Crop,
+                                )
+                                
+                            }
                         }
                     }
                 }
+                
                 
                 Button(
                     modifier = Modifier
@@ -282,87 +286,88 @@ object MainScreen : ScreenBaseData {
             }
         }
     }
-    
-    @Composable
-    private fun Buttons(openSettingClick: () -> Unit, openHistoryClick: () -> Unit) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Row(
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
+}
+
+@Composable
+private fun Buttons(openSettingClick: () -> Unit, openHistoryClick: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Button(
+                modifier = Modifier.testTag(MainScreenId.buttonSettings),
+                onClick = openSettingClick,
             ) {
-                Button(
-                    modifier = Modifier.testTag(MainScreenId.buttonSettings),
-                    onClick = openSettingClick,
-                ) {
-                    Text(
-                        text = stringResource(id = string.main_screen_intro_button),
-                        textAlign = TextAlign.Center,
-                    )
-                }
-                
-                Button(
-                    modifier = Modifier.testTag(MainScreenId.buttonHistory),
-                    onClick = openHistoryClick,
-                ) {
-                    Text(text = stringResource(string.go_to_history), textAlign = Companion.Center)
-                }
+                Text(
+                    text = stringResource(id = string.main_screen_intro_button),
+                    textAlign = TextAlign.Center,
+                )
+            }
+            
+            Button(
+                modifier = Modifier.testTag(MainScreenId.buttonHistory),
+                onClick = openHistoryClick,
+            ) {
+                Text(text = stringResource(string.go_to_history), textAlign = Companion.Center)
             }
         }
-        
-        
     }
     
-    @Composable
-    private fun RoundedLinearProgressIndicator(
-        modifier: Modifier = Modifier,
-        height: Dp = 8.dp,
-        color: Color = MaterialTheme.colorScheme.primary,
-        backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    
+}
+
+@Composable
+private fun RoundedLinearProgressIndicator(
+    modifier: Modifier = Modifier,
+    height: Dp = 8.dp,
+    color: Color = MaterialTheme.colorScheme.primary,
+    backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
+) {
+    val infiniteTransition = rememberInfiniteTransition(label = "")
+    val animatedColor by infiniteTransition.animateColor(
+        initialValue = color,
+        targetValue = color.copy(alpha = .5f),
+        animationSpec = infiniteRepeatable(
+            animation = tween(768, easing = LinearEasing), repeatMode = RepeatMode.Reverse
+        ),
+        label = ""
+    )
+    
+    val animTranslationX by infiniteTransition.animateFloat(
+        initialValue = 0f, targetValue = .75f, animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = LinearEasing), repeatMode = RepeatMode.Reverse
+        ), label = ""
+    )
+    
+    Box(
+        modifier.fillMaxWidth()
     ) {
-        val infiniteTransition = rememberInfiniteTransition(label = "")
-        val animatedColor by infiniteTransition.animateColor(
-            initialValue = color,
-            targetValue = color.copy(alpha = .5f),
-            animationSpec = infiniteRepeatable(
-                animation = tween(768, easing = LinearEasing), repeatMode = RepeatMode.Reverse
-            ),
-            label = ""
-        )
-        
-        val animTranslationX by infiniteTransition.animateFloat(
-            initialValue = 0f, targetValue = .75f, animationSpec = infiniteRepeatable(
-                animation = tween(1000, easing = LinearEasing), repeatMode = RepeatMode.Reverse
-            ), label = ""
-        )
-        
-        Box(
-            modifier.fillMaxWidth()
+        Row(
+            Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth()
+                .height(height)
+                .padding(start = 32.dp, end = 32.dp)
+                .background(backgroundColor, CircleShape)
         ) {
-            Row(
-                Modifier
-                    .align(Alignment.Center)
-                    .fillMaxWidth()
-                    .height(height)
-                    .padding(start = 32.dp, end = 32.dp)
-                    .background(backgroundColor, CircleShape)
-            ) {
-                BoxWithConstraints {
-                    Box(
-                        Modifier
-                            .graphicsLayer {
-                                translationX = (maxWidth * animTranslationX).toPx()
-                            }
-                            .fillMaxHeight()
-                            .clip(CircleShape)
-                            .width(maxWidth * .25f)
-                            .background(animatedColor, CircleShape))
-                }
+            BoxWithConstraints {
+                Box(
+                    Modifier
+                        .graphicsLayer {
+                            translationX = (maxWidth * animTranslationX).toPx()
+                        }
+                        .fillMaxHeight()
+                        .clip(CircleShape)
+                        .width(maxWidth * .25f)
+                        .background(animatedColor, CircleShape))
             }
         }
     }
 }
+
