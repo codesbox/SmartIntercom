@@ -6,12 +6,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import ru.samsung.smartintercom.R
 import ru.samsung.smartintercom.R.string
 import ru.samsung.smartintercom.core.SettingScreenId
 import ru.samsung.smartintercom.ui.screen.ScreenBaseData
@@ -36,19 +38,23 @@ object SettingScreen : ScreenBaseData {
                     .fillMaxSize()
                     .padding(paddingValues = paddingValues)
             ) {
-                
+                IconButton(modifier = Modifier.align(Alignment.TopStart).padding(8.dp) ,onClick = { navController.popBackStack() }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.back),
+                        contentDescription = stringResource(string.go_back)
+                    )
+                }
                 
                 Column(
                     modifier = Modifier.align(Alignment.Center),
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    
-                    
                     val intercomInfo by viewModel.intercomInfo.collectAsState()
                     var isHouseError by remember { mutableStateOf(isValidHouse(intercomInfo.house)) }
                     var isRoomError by remember { mutableStateOf(isValidRoom(intercomInfo.room)) }
                     var isVisible by remember { mutableStateOf(false) }
+                    
                     
                     Text(
                         modifier = Modifier

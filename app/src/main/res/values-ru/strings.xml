@@ -20,4 +20,5 @@
     <string name="start">Начать</string>
     <string name="notification_text">Входящий вызов</string>
     <string name="error">Ошибка подключения</string>
+    <string name="go_back">Назад</string>
 </resources>

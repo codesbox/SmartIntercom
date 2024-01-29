@@ -180,7 +180,7 @@ object MainScreen : ScreenBaseData {
                     onClick = retryClick
                 ) {
                     Text(
-                        text = "Retry",
+                        text = stringResource(id = string.retry),
                         style = MaterialTheme.typography.button.large,
                         textAlign = TextAlign.Center,
                     )
