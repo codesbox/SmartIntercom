@@ -142,6 +142,8 @@ object MainScreen : ScreenBaseData {
     @Composable
     private fun LoadingState(onLaunch: () -> Unit) {
         
+        Box(modifier = Modifier.testTag(MainScreenId.buttonStart).width(0.dp).height(0.dp))
+        
         LaunchedEffect(key1 = Unit, block = {
             onLaunch()
         })
@@ -158,6 +160,9 @@ object MainScreen : ScreenBaseData {
     
     @Composable
     private fun ErrorState(retryClick: () -> Unit) {
+        
+        Box(modifier = Modifier.testTag(MainScreenId.buttonStart).width(0.dp).height(0.dp))
+        
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
@@ -193,6 +198,9 @@ object MainScreen : ScreenBaseData {
         takePhotoClick: () -> Unit,
         retryClick: () -> Unit,
     ) {
+        
+        Box(modifier = Modifier.testTag(MainScreenId.buttonStart).width(0.dp).height(0.dp))
+        
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
