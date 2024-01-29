@@ -68,7 +68,7 @@ object CallHistoryScreen : ScreenBaseData {
         Card(
             modifier = Modifier
                 .wrapContentWidth()
-                .wrapContentHeight()
+                .wrapContentHeight().padding(12.dp)
         ) {
             Row(
                 modifier = Modifier

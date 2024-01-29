@@ -46,8 +46,9 @@ object SettingScreen : ScreenBaseData {
                     
                     
                     val intercomInfo by viewModel.intercomInfo.collectAsState()
-                    var isHouseError by remember { mutableStateOf(false) }
-                    var isRoomError by remember { mutableStateOf(false) }
+                    var isHouseError by remember { mutableStateOf(isValidHouse(intercomInfo.house)) }
+                    var isRoomError by remember { mutableStateOf(isValidRoom(intercomInfo.room)) }
+                    var isVisible by remember { mutableStateOf(false) }
                     
                     Text(
                         modifier = Modifier
@@ -66,6 +67,8 @@ object SettingScreen : ScreenBaseData {
                         onValueChange = {
                             viewModel.changeHouse(it)
                             isHouseError = !isValidHouse(it)
+                            isVisible =
+                                !isHouseError && !isRoomError && (viewModel.previousInfo.house != viewModel.intercomInfo.value.house || viewModel.previousInfo.room != viewModel.intercomInfo.value.room)
                         },
                         placeholder = {
                             Text(text = stringResource(string.enter_house_number))
@@ -82,6 +85,8 @@ object SettingScreen : ScreenBaseData {
                         onValueChange = {
                             viewModel.changeFlat(it)
                             isRoomError = !isValidRoom(it)
+                            isVisible =
+                                !isRoomError && !isHouseError && (viewModel.previousInfo.house != viewModel.intercomInfo.value.house || viewModel.previousInfo.room != viewModel.intercomInfo.value.room)
                         },
                         placeholder = {
                             Text(text = stringResource(string.enter_room_number))
@@ -104,7 +109,7 @@ object SettingScreen : ScreenBaseData {
                             
                             navController.popBackStack()
                         },
-                        enabled = !isHouseError and !isRoomError,
+                        enabled = isVisible,
                     ) {
                         Text(
                             stringResource(string.save_button),

@@ -17,6 +17,10 @@ class SettingViewModel(
     private val _intercomInfo = MutableStateFlow(AuthEntity("", ""))
     val intercomInfo = _intercomInfo.asStateFlow()
     
+    val previousInfo: AuthEntity by lazy {
+        getAuthDataUseCase.execute()
+    }
+    
     fun loadIntercomInfo() {
         _intercomInfo.value = getAuthDataUseCase.execute()
     }
