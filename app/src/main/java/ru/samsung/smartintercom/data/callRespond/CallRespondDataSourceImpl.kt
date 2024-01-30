@@ -23,17 +23,20 @@ class CallRespondDataSourceImpl(private val getAuthDataUseCase: GetAuthDataUseCa
 
                     val response = when (doorState) {
                         DoorState.OPEN -> apiService.sendStatus(authData.room, authData.house, CallRespondRequestBody("open"))
-                        DoorState.CLOSE -> apiService.sendStatus("", authData.house, CallRespondRequestBody("close"))
+                        DoorState.CLOSE -> apiService.sendStatus(authData.room, authData.house, CallRespondRequestBody("close"))
                     }
 
                     if (response.isEmpty()) {
+                        Log.d("HelloB", response)
                         emit(CallRespondStatus.BAD_REQUEST)
                     } else {
+                        Log.d("Hello", response)
                         emit(CallRespondStatus.OK)
                     }
 
 
             } catch (e: Exception) {
+                e.printStackTrace()
                 emit(CallRespondStatus.BAD_REQUEST)
             }
         }
