@@ -28,20 +28,42 @@ object SettingScreen : ScreenBaseData {
     override fun Render(navController: NavController) {
         val viewModel = koinViewModel<SettingViewModel>()
         
-        LaunchedEffect(key1 = Unit, block = {
-            viewModel.loadIntercomInfo()
-        })
-        
-        
         val intercomInfo by viewModel.intercomInfo.collectAsState()
         val previousState by viewModel.previousInfo.collectAsState()
-        var isHouseError by remember { mutableStateOf(isValidHouse(intercomInfo.house)) }
-        var isRoomError by remember { mutableStateOf(isValidRoom(intercomInfo.room)) }
-        var isVisible by remember { mutableStateOf(false) }
+        
+        var isHouseError by remember { mutableStateOf(false) }
+        var isRoomError by remember { mutableStateOf(false) }
+        var isVisible by remember {
+            mutableStateOf(
+                false
+            )
+        }
+        
+        LaunchedEffect(key1 = Unit, block = {
+            isHouseError = !isValidHouse(intercomInfo.house)
+            isRoomError = !isValidRoom(intercomInfo.room)
+            isVisible =
+                !isHouseError && !isRoomError && (viewModel.previousInfo.value.house != viewModel.intercomInfo.value.house || viewModel.previousInfo.value.room != viewModel.intercomInfo.value.room)
+
+        })
+        
+        LaunchedEffect(key1 = intercomInfo, block = {
+            isHouseError = !isValidHouse(intercomInfo.house)
+            isRoomError = !isValidRoom(intercomInfo.room)
+            isVisible =
+                !isHouseError && !isRoomError && (viewModel.previousInfo.value.house != viewModel.intercomInfo.value.house || viewModel.previousInfo.value.room != viewModel.intercomInfo.value.room)
+
+        })
+        
         
         LaunchedEffect(key1 = previousState, key2 = intercomInfo, block = {
             isVisible =
                 !isHouseError && !isRoomError && (viewModel.previousInfo.value.house != viewModel.intercomInfo.value.house || viewModel.previousInfo.value.room != viewModel.intercomInfo.value.room)
+
+        })
+        
+        LaunchedEffect(key1 = previousState, block = {
+            viewModel.loadIntercomInfo()
         })
         
         Scaffold(modifier = Modifier.setupScreenData(this)) { paddingValues ->
@@ -52,7 +74,8 @@ object SettingScreen : ScreenBaseData {
             ) {
                 IconButton(modifier = Modifier
                     .align(Alignment.TopStart)
-                    .padding(8.dp) ,onClick = { navController.popBackStack() }) {
+                    .padding(8.dp),
+                    onClick = { navController.popBackStack() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.back),
                         contentDescription = stringResource(string.go_back)

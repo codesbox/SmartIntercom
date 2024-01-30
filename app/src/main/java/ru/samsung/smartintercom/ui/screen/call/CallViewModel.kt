@@ -60,8 +60,8 @@ private fun getTime(calendar: Calendar): CallTime {
             else -> month.toString()
         },
         day = when (day.toString().length) {
-            1    -> "0$month"
-            else -> month.toString()
+            1    -> "0$day"
+            else -> day.toString()
         },
         hours = when (hour.toString().length) {
             1    -> "0$hour"
