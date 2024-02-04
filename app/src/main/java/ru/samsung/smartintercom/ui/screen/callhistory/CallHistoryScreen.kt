@@ -29,30 +29,35 @@ import ru.samsung.smartintercom.utils.setupScreenData
 
 object CallHistoryScreen : ScreenBaseData {
     override val name = CallHistoryId.screenId
-
+    
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Render(navController: NavController) {
         val viewModel = koinViewModel<CallHistoryViewModel>()
         val calls by viewModel.calls.collectAsState()
-
+        
         LaunchedEffect(key1 = Unit, block = {
             viewModel.getHistory()
         })
-
-
+        
+        
         Scaffold(modifier = Modifier.setupScreenData(this)) { paddingValues ->
-            Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceEvenly) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
                 IconButton(modifier = Modifier
                     .align(Alignment.Start)
-                    .padding(8.dp) ,onClick = { navController.popBackStack() }) {
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+                    onClick = { navController.popBackStack() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.back),
                         contentDescription = stringResource(string.go_back)
                     )
                 }
                 when (calls.isEmpty()) {
-                    true -> Box(modifier = Modifier.fillMaxSize()) {
+                    true  -> Box(modifier = Modifier.fillMaxSize()) {
                         Text(
                             modifier = Modifier.align(Alignment.Center),
                             text = stringResource(string.no_calls_yet),
@@ -60,7 +65,7 @@ object CallHistoryScreen : ScreenBaseData {
                             textAlign = TextAlign.Center,
                         )
                     }
-
+                    
                     false -> LazyColumn(
                         modifier = Modifier
                             .testTag(CallHistoryId.recycler)
@@ -75,7 +80,7 @@ object CallHistoryScreen : ScreenBaseData {
             }
         }
     }
-
+    
     @Composable
     fun CallInfoCard(callInfo: CallInfo) {
         Card(
@@ -88,26 +93,34 @@ object CallHistoryScreen : ScreenBaseData {
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(vertical = 8.dp, horizontal = 4.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                    .padding(vertical = 8.dp, horizontal = 8.dp),
+                horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                Icon(
+                    painter = painterResource(
+                        id = when (callInfo.doorState) {
+                            OPEN  -> R.drawable.ic_call
+                            CLOSE -> R.drawable.ic_call_end
+                        }
+                    ), contentDescription = null
+                )
                 Text(
                     modifier = Modifier.testTag(CallHistoryId.textDate),
                     text = callInfo.callTime.convertToString(),
-                    style = MaterialTheme.typography.headlineLarge
+                    style = MaterialTheme.typography.headlineSmall
                 )
                 Text(
                     modifier = Modifier.testTag(CallHistoryId.textStatus),
                     text = when (callInfo.doorState) {
-                        OPEN -> stringResource(string.opened)
+                        OPEN  -> stringResource(string.opened)
                         CLOSE -> stringResource(string.closed)
                     },
-                    style = MaterialTheme.typography.headlineLarge
+                    style = MaterialTheme.typography.headlineSmall
                 )
             }
         }
     }
-
+    
     private fun CallTime.convertToString() = "$hours:$minutes $day.$month.$year"
 }

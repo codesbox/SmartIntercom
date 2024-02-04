@@ -52,7 +52,6 @@ class MainActivity : ComponentActivity() {
                         lifecycleScope.launch {
                             repeatOnLifecycle(Lifecycle.State.STARTED) {
                                 navController.navigate(Screen.CALL)
-                                notificationHelper.cancelNotifications(this@MainActivity)
                             }
                         }
                     }
@@ -60,10 +59,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-    
-    override fun onStop() {
-        super.onStop()
-        notificationHelper.created = false
     }
 }
